@@ -36,3 +36,12 @@ D:\System32\CSharp\PRODUCTOS\ApiProductosJWT\ApiProductosJWT\obj\Debug\net6.0\re
 D:\System32\CSharp\PRODUCTOS\ApiProductosJWT\ApiProductosJWT\obj\Debug\net6.0\ApiProductosJWT.pdb
 D:\System32\CSharp\PRODUCTOS\ApiProductosJWT\ApiProductosJWT\obj\Debug\net6.0\ApiProductosJWT.genruntimeconfig.cache
 D:\System32\CSharp\PRODUCTOS\ApiProductosJWT\ApiProductosJWT\obj\Debug\net6.0\ref\ApiProductosJWT.dll
+D:\System32\CSharp\PRODUCTOS\ApiProductosJWT\ApiProductosJWT\bin\Debug\net6.0\BCrypt.Net-Core.dll
+D:\System32\CSharp\PRODUCTOS\ApiProductosJWT\ApiProductosJWT\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\System32\CSharp\PRODUCTOS\ApiProductosJWT\ApiProductosJWT\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
+D:\System32\CSharp\PRODUCTOS\ApiProductosJWT\ApiProductosJWT\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\System32\CSharp\PRODUCTOS\ApiProductosJWT\ApiProductosJWT\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+D:\System32\CSharp\PRODUCTOS\ApiProductosJWT\ApiProductosJWT\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+D:\System32\CSharp\PRODUCTOS\ApiProductosJWT\ApiProductosJWT\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\System32\CSharp\PRODUCTOS\ApiProductosJWT\ApiProductosJWT\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+D:\System32\CSharp\PRODUCTOS\ApiProductosJWT\ApiProductosJWT\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll

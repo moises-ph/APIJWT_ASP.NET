@@ -1,4 +1,5 @@
 ﻿using ApiProductosJWT.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ namespace ApiProductosJWT.Controllers
 {
     [EnableCors("ReglasCors")]
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class ProductoController : ControllerBase
     {

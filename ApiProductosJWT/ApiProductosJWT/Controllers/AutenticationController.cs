@@ -8,6 +8,7 @@ using ApiProductosJWT.Models;
 using System.Data;
 using System.Data.SqlClient;
 using BC = BCrypt.Net.BCrypt;
+using Microsoft.Extensions.Configuration;
 
 namespace ApiProductosJWT.Controllers
 {
@@ -20,7 +21,7 @@ namespace ApiProductosJWT.Controllers
 
         public AutenticationController(IConfiguration config)
         {
-            secretKey = config.GetSection("settings").GetSection("secreteKey").Value;
+            secretKey = config.GetSection("settings").GetSection("secretKey").Value;
             cadenaSQL = config.GetConnectionString("CadenaSQL");
         }
 
@@ -32,11 +33,12 @@ namespace ApiProductosJWT.Controllers
             {
                 using (var conection = new SqlConnection(cadenaSQL))
                 {
-                    string password = null;
-                    int Id = 0;
+                    string? password = null;
+                    int? Id = 0;
                     conection.Open();
                     var cmd = new SqlCommand("Auth_usr", conection);
                     cmd.Parameters.AddWithValue("email", user.email);
+                    cmd.CommandType = CommandType.StoredProcedure;
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
@@ -64,9 +66,9 @@ namespace ApiProductosJWT.Controllers
                             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
                         };
                         var tokenHandler = new JwtSecurityTokenHandler();
-                        var tokenConfig = tokenHandler.CreateToken(tokenDescriptor);
+                        SecurityToken tokenConfig = tokenHandler.CreateToken(tokenDescriptor);
                         string tokencreado = tokenHandler.WriteToken(tokenConfig);
-                        return StatusCode(StatusCodes.Status200OK, new { token = tokencreado });
+                        return StatusCode(StatusCodes.Status200OK, new { token = tokencreado, User_Id = Id });
                     }
                     else
                     {

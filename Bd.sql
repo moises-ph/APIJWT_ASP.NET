@@ -10,7 +10,7 @@ create table Users(
 	password varchar(max) not null
 );
 
-
+select * from Users
 -- Procedimientos
 
 go
@@ -47,6 +47,23 @@ begin transaction TX_Create
 		SELECT ERROR_MESSAGE() as Respuesta, 1 as Error
 	end catch
 
+	-- Sin return ----
+go
+create procedure Create_usr
+	@Name varchar(50),
+	@Lastname varchar(50),
+	@email varchar(100),
+	@password varchar(max)
+as
+begin transaction TX_Create
+	begin try
+		INSERT INTO Users(Name, Lastname, email, password) values (@Name, @Lastname, @email,@password);
+		commit transaction TX_Create
+	end try
+	begin catch
+		rollback transaction TX_Create
+	end catch
+
 go
 create procedure Delete_usr
 	@Id int
@@ -54,16 +71,16 @@ as
 begin transaction TX_Delete
 	BEGIN TRY
 		DELETE  FROM Users where Id = @Id
-		commit TX_Delete
+		commit transaction TX_Delete
 		SELECT 'Usuario eliminado Correctamente' as Respuesta, 0 as Error
 	END TRY
 	BEGIN CATCH
-		rollback TX_Delete
+		rollback transaction TX_Delete
 		SELECT ERROR_MESSAGE() as Respuesta, 1 as Error
 	END CATCH
 
 go
-create procedure Update_usr
+create procedure Update_usr	
 	@Id int,
 	@Name varchar(50),
 	@Lastname varchar(50),
@@ -73,11 +90,11 @@ as
 begin transaction TX_Update
 	BEGIN TRY
 		UPDATE Users set Name = ISNULL(@Name, Name), Lastname =ISNULL( @Lastname, Lastname), email =ISNULL( @email, email), password = ISNULL(@password, password) where Id = @Id
-		commit TX_Update
+		commit transaction TX_Update
 		SELECT 'Usuario actualizado correctamente' as Respuesta, 0 as Error
 	END TRY
 	BEGIN CATCH
-		rollback TX_Update
+		rollback transaction TX_Update
 		SELECT ERROR_MESSAGE() as Respuesta, 1 as Error
 	END CATCH
 	
