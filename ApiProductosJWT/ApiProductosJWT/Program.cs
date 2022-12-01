@@ -12,7 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Configuration.AddJsonFile("appsettings.json");
-var secretKey = builder.Configuration.GetSection("settings").GetSection("secretKey").ToString();// “=Adsi2022=";
+var secretKey = builder.Configuration.GetSection("settings").GetSection("secretKey").Value;// “=Adsi2022=";
 var keyBytes = Encoding.UTF8.GetBytes(secretKey);
 builder.Services.AddAuthentication(config => {
     config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

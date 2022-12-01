@@ -35,30 +35,30 @@ namespace ApiProductosJWT.Controllers
                     cmd.Parameters.AddWithValue("email", user.email);
                     cmd.Parameters.AddWithValue("password", password);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.ExecuteNonQuery();
-                    return StatusCode(StatusCodes.Status200OK, new { Message = "Usuario creado correctamente" });
-                    //using (var reader = cmd.ExecuteReader())
-                    //{
-                    //    if(reader.Read())
-                    //    {
-                    //        err = Convert.ToInt32(reader["Error"].ToString());
-                    //        if (err == 1)
-                    //        {
-                    //            message = reader["Respuesta"].ToString();
-                    //            reader.Close();
-                    //            return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Hubo un error al crear el usuario", Error = err });
-                    //        }
-                    //        else
-                    //        {
-                    //            reader.Close();
-                    //            return StatusCode(StatusCodes.Status200OK, new { Message = "Usuario creado correctamente" });
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Hubo un error al crear el usuario" });
-                    //    }
-                    //}
+                    //cmd.ExecuteNonQuery();
+                    //return StatusCode(StatusCodes.Status200OK, new { Message = "Usuario creado correctamente" });
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if(reader.Read())
+                        {
+                            err = Convert.ToInt32(reader["Error"].ToString());
+                            if (err == 1)
+                            {
+                                message = reader["Respuesta"].ToString();
+                                reader.Close();
+                                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Hubo un error al crear el usuario", Error = err });
+                            }
+                            else
+                            {
+                                reader.Close();
+                                return StatusCode(StatusCodes.Status200OK, new { Message = "Usuario creado correctamente" });
+                            }
+                        }
+                        else
+                        {
+                            return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Hubo un error al crear el usuario" });
+                        }
+                    }
                 }
             }
             catch(Exception ex)
@@ -86,6 +86,7 @@ namespace ApiProductosJWT.Controllers
                     cmd.Parameters.AddWithValue("Lastname", user.Lastname is null ? DBNull.Value : user.Lastname);
                     cmd.Parameters.AddWithValue("email", user.email is null ? DBNull.Value : user.email);
                     cmd.Parameters.AddWithValue("password", password is null ? DBNull.Value : password);
+                    cmd.CommandType = CommandType.StoredProcedure;
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
@@ -161,7 +162,7 @@ namespace ApiProductosJWT.Controllers
         }
 
         [HttpGet]
-        [Route("/{id:int}")]
+        [Route("{id:int}")]
         [Authorize]
         public IActionResult Get(int id)
         {
@@ -171,8 +172,9 @@ namespace ApiProductosJWT.Controllers
                 using (var conection = new SqlConnection(cadenaSQL))
                 {
                     conection.Open();
-                    var cmd = new SqlCommand("Delete_usr", conection);
+                    var cmd = new SqlCommand("Select_usr", conection);
                     cmd.Parameters.AddWithValue("Id", id);
+                    cmd.CommandType = CommandType.StoredProcedure;
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())

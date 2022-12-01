@@ -53,7 +53,7 @@ namespace ApiProductosJWT.Controllers
                         }
                     }
                     conection.Close(); 
-                    
+
                     if(BC.Verify(user.password, password))
                     {
                         var keyBytes = Encoding.ASCII.GetBytes(secretKey);
@@ -66,7 +66,7 @@ namespace ApiProductosJWT.Controllers
                             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
                         };
                         var tokenHandler = new JwtSecurityTokenHandler();
-                        SecurityToken tokenConfig = tokenHandler.CreateToken(tokenDescriptor);
+                        var tokenConfig = tokenHandler.CreateToken(tokenDescriptor);
                         string tokencreado = tokenHandler.WriteToken(tokenConfig);
                         return StatusCode(StatusCodes.Status200OK, new { token = tokencreado, User_Id = Id });
                     }
@@ -82,5 +82,7 @@ namespace ApiProductosJWT.Controllers
 
             }
         }
+
+
     }
 }

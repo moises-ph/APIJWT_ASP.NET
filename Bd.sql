@@ -7,11 +7,12 @@ create table Users(
 	Name varchar(50) not null,
 	Lastname varchar(50) not null,
 	email varchar(100) not null unique,
-	password varchar(max) not null
+	password varchar(max) not null,
+	perfil varchar(max) default 'default.png'
 );
 
 select * from Users
--- Procedimientos
+-- Procedimientos De USUARIO
 
 go
 create procedure Auth_usr
@@ -36,14 +37,14 @@ create procedure Create_usr
 	@email varchar(100),
 	@password varchar(max)
 as
-begin transaction TX_Create
+begin transaction TX_Create_usr
 	begin try
 		INSERT INTO Users(Name, Lastname, email, password) values (@Name, @Lastname, @email,@password);
-		commit TX_Create
+		commit transaction TX_Create_usr
 		SELECT 'Usuario Creado correctamente' as Respuesta, 0 as Error
 	end try
 	begin catch
-		rollback TX_Create
+		rollback transaction TX_Create_usr
 		SELECT ERROR_MESSAGE() as Respuesta, 1 as Error
 	end catch
 
@@ -55,27 +56,27 @@ create procedure Create_usr
 	@email varchar(100),
 	@password varchar(max)
 as
-begin transaction TX_Create
+begin transaction TX_Create_usr
 	begin try
 		INSERT INTO Users(Name, Lastname, email, password) values (@Name, @Lastname, @email,@password);
-		commit transaction TX_Create
+		commit transaction TX_Create_usr
 	end try
 	begin catch
-		rollback transaction TX_Create
+		rollback transaction TX_Create_usr
 	end catch
 
 go
 create procedure Delete_usr
 	@Id int
 as
-begin transaction TX_Delete
+begin transaction TX_Delete_usr
 	BEGIN TRY
 		DELETE  FROM Users where Id = @Id
-		commit transaction TX_Delete
+		commit transaction TX_Delete_usr
 		SELECT 'Usuario eliminado Correctamente' as Respuesta, 0 as Error
 	END TRY
 	BEGIN CATCH
-		rollback transaction TX_Delete
+		rollback transaction TX_Delete_usr
 		SELECT ERROR_MESSAGE() as Respuesta, 1 as Error
 	END CATCH
 
@@ -87,19 +88,62 @@ create procedure Update_usr
 	@email varchar(100),
 	@password varchar(max)
 as
-begin transaction TX_Update
+begin transaction TX_Update_usr
 	BEGIN TRY
 		UPDATE Users set Name = ISNULL(@Name, Name), Lastname =ISNULL( @Lastname, Lastname), email =ISNULL( @email, email), password = ISNULL(@password, password) where Id = @Id
-		commit transaction TX_Update
+		commit transaction TX_Update_usr
 		SELECT 'Usuario actualizado correctamente' as Respuesta, 0 as Error
 	END TRY
 	BEGIN CATCH
-		rollback transaction TX_Update
+		rollback transaction TX_Update_usr
 		SELECT ERROR_MESSAGE() as Respuesta, 1 as Error
 	END CATCH
 	
+-----------------------------------------------------------------------------------------------------------------------------------------
 
-----------------------------------------------
+
+go
+create procedure Select_perfil
+	@Id int
+as
+begin
+	SELECT perfil from Users where Id = @Id
+end
+
+
+go
+create procedure Delete_perfil
+	@Id int
+as
+begin transaction TX_Delete_pf
+	begin try
+		UPDATE Users set perfil = 'default.png' where Id = @Id
+		commit transaction TX_Delete_pf
+		Select 'Imagen de perfil eliminada correctamente' as Respuesta, 0 as Error
+	end try
+	BEGIN CATCH
+		rollback transaction TX_Delete_pf
+		SELECT ERROR_MESSAGE() as Respuesta, 1 as Error
+	END CATCH
+
+go
+create procedure Update_perfil
+	@Id int,
+	@perfil varchar(max)
+as
+begin transaction TX_Update_pf
+	begin try 
+		UPDATE Users set perfil = @perfil where Id = @Id
+		commit transaction TX_Update_pf
+		Select 'Imagen de perfil actualizada correctamente' as Respuesta, 0 as Error
+	end try
+	BEGIN CATCH
+		rollback transaction TX_Update_pf
+		SELECT ERROR_MESSAGE() as Respuesta, 1 as Error
+	END CATCH
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------
 create table PRODUCTO(
 	IdProducto int primary key identity,
 	CodigoBarra varchar(50) unique,
